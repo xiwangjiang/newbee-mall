@@ -11,14 +11,14 @@ package ltd.newbee.mall.controller.admin;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.entity.AdminUser;
 import ltd.newbee.mall.service.AdminUserService;
-
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Locale;
 
 /**
  * @author 13
@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private AdminUserService adminUserService;
@@ -64,7 +65,7 @@ public class AdminController {
             return "admin/login";
         }
         String kaptchaCode = session.getAttribute("verifyCode") + "";
-        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
+        if (StringUtils.isEmpty(kaptchaCode) || !(verifyCode.toUpperCase(Locale.ROOT)).equals(kaptchaCode.toUpperCase(Locale.ROOT))) {
             session.setAttribute("errorMsg", "验证码错误");
             return "admin/login";
         }
